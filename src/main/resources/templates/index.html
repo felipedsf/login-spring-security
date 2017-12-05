@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- Bootstrap core CSS -->
+<link
+	href="http://cdn.jsdelivr.net/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+	th:href="@{/webjars/bootstrap/4.0.0-beta.2/css/bootstrap.min.css}"
+	rel="stylesheet" media="screen" />
+
+<link href="../jumbotron.css" th:href="@{/jumbotron.css}"
+	rel="stylesheet" />
+<link href="../signin.css" th:href="@{/signin.css}" rel="stylesheet" />
+
+<title>Hotmessage</title>
+</head>
+<body>
+	<!-- 
+	<div th:replace="fragments/header :: header">&nbsp;</div>
+	<br />
+	<br />
+	<br />
+	<div class="container">
+		<div th:replace="fragments/login :: login">&nbsp;</div>
+	</div>
+	-->
+
+	<div class="container">
+		<form class="form-signin" id="loginForm"
+			 th:object="${user}" th:method="post" >
+			<h2 class="form-signin-heading">Login</h2>
+
+			<label for="inputLogin" class="sr-only">Login</label> 
+			<input type="text" class="form-control" placeholder="Login" th:field="*{name}" /> 
+				
+			<label for="inputPassword" class="sr-only">Password</label>
+			<input type="password" class="form-control" placeholder="Password" th:field="*{password}" />
+
+			<button class="btn btn-lg btn-primary btn-block" form="loginForm" type="submit">Sign in</button>
+		</form>
+		<a href="/register" th:href="@{/register}">Register</a>
+
+	</div>
+
+</body>
+</html>
