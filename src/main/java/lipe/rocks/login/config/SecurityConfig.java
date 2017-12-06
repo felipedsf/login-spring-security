@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 			.csrf().disable()
 			.authorizeRequests()
-				.antMatchers("/", "/register").permitAll()
+				.antMatchers("/register").permitAll()
 				.anyRequest().authenticated()
 			.and()
 				.formLogin()
@@ -34,12 +34,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.usernameParameter("name")
 				.passwordParameter("password")
 			.and()
+				.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessUrl("/")
+				.invalidateHttpSession(true)
+			.and()
 				.logout().permitAll();
 	}
 
 	@Override
 	public void configure(WebSecurity web) throws Exception {
-		web. ignoring().antMatchers("/resources/**", "/static/**", "/webjars/**");
+		web. ignoring().antMatchers("/resources/**", "/static/**", "/webjars/**", "/css/**");
 	}
 
 	@Autowired

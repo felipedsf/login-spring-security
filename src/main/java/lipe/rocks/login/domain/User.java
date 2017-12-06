@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +37,7 @@ public class User {
 	@JoinColumn(name = "user_role", nullable = false)
 	private Role role;
 
-	private Date createdDate = new Date();
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdDate;
 
 }

@@ -1,8 +1,7 @@
 package lipe.rocks.login.controller;
 
-import java.security.Principal;
-
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
@@ -22,13 +21,12 @@ public class NavigationController {
 	}
 
 	@GetMapping({ "", "/" })
-	public String index(Model model, Principal principal) {
-		if (principal != null) {
-			System.out.println(principal.getName());
-		}
-
-		if (!model.containsAttribute("user")) {
-			model.addAttribute("user", new User());
+	public String index(Model model, Authentication authentication) {
+		if (authentication != null && authentication.isAuthenticated()) {
+			User user = userService.getUserByName(authentication.getName());
+			model.addAttribute("user", user);
+		} else {
+			return "redirect:/login";
 		}
 		return "index";
 	}
@@ -36,23 +34,18 @@ public class NavigationController {
 	@GetMapping("/login")
 	public String login(Model model) {
 		model.addAttribute("user", new User());
-		return "index";
+		return "login";
+	}
+
+	@PostMapping("/login")
+	public String login() {
+		return "redirect:/";
 	}
 
 	@GetMapping("/register")
 	public String register(Model model) {
 		model.addAttribute("user", new User());
 		return "register";
-	}
-
-	@PostMapping(path = { "", "/", "/login" }, consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-	public String login(User userForm) {
-		User user = userService.getUserByName(userForm);
-
-		Model model = new ExtendedModelMap();
-		model.addAttribute("user", user);
-
-		return "redirect:/";
 	}
 
 	@PostMapping(path = "/register", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -63,13 +56,6 @@ public class NavigationController {
 		model.addAttribute("user", user);
 
 		return "redirect:/";
-	}
-
-	@PostMapping("/logout")
-	public String logout() {
-		Model model = new ExtendedModelMap();
-		model.addAttribute("user", null);
-		return index(model, null);
 	}
 
 }

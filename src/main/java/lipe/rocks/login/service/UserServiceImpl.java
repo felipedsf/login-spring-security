@@ -1,5 +1,7 @@
 package lipe.rocks.login.service;
 
+import java.util.Date;
+
 import org.springframework.stereotype.Service;
 
 import lipe.rocks.login.domain.User;
@@ -20,12 +22,13 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User save(User user) {
 		user.setRole(roleRepository.findByDescription("user"));
+		user.setCreatedDate(new Date());
 		return userRepository.save(user);
 	}
 
 	@Override
-	public User getUserByName(User user) {
-		User userSaved = userRepository.findByName(user.getName());
+	public User getUserByName(String username) {
+		User userSaved = userRepository.findByName(username);
 		return userSaved;
 	}
 
