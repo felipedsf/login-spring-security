@@ -1,5 +1,7 @@
 package lipe.rocks.login.controller;
 
+import java.security.Principal;
+
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ExtendedModelMap;
@@ -20,10 +22,20 @@ public class NavigationController {
 	}
 
 	@GetMapping({ "", "/" })
-	public String index(Model model) {
+	public String index(Model model, Principal principal) {
+		if (principal != null) {
+			System.out.println(principal.getName());
+		}
+
 		if (!model.containsAttribute("user")) {
 			model.addAttribute("user", new User());
 		}
+		return "index";
+	}
+
+	@GetMapping("/login")
+	public String login(Model model) {
+		model.addAttribute("user", new User());
 		return "index";
 	}
 
@@ -57,7 +69,7 @@ public class NavigationController {
 	public String logout() {
 		Model model = new ExtendedModelMap();
 		model.addAttribute("user", null);
-		return index(model);
+		return index(model, null);
 	}
 
 }
